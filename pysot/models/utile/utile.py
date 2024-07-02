@@ -93,8 +93,8 @@ class HiFT(nn.Module):
         
         
         h, w = res3.shape[-2:]
-        i = t.arange(w).cuda()
-        j = t.arange(h).cuda()
+        i = t.arange(w)
+        j = t.arange(h)
         x_emb = self.col_embed(i)
         y_emb = self.row_embed(j)
         pos = t.cat([

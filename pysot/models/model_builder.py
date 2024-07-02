@@ -19,8 +19,8 @@ class ModelBuilder(nn.Module):
     def __init__(self):
         super(ModelBuilder, self).__init__()
 
-        self.backbone = AlexNet().cuda()
-        self.grader=HiFT(cfg).cuda()
+        self.backbone = AlexNet()
+        self.grader=HiFT(cfg)
         self.cls2loss=nn.BCEWithLogitsLoss()
         self.IOULoss=IOULoss()          
         
@@ -31,11 +31,12 @@ class ModelBuilder(nn.Module):
             self.zf=zf
             
     
-    def track(self, x):
+    def forward(self, x,z):
         with t.no_grad():
             
+            zf = self.backbone(z)
             xf = self.backbone(x)  
-            loc,cls1,cls2=self.grader(xf,self.zf)
+            loc,cls1,cls2=self.grader(xf,zf)
 
             return {
 
@@ -88,7 +89,7 @@ class ModelBuilder(nn.Module):
         return anchor
     
 
-    def forward(self,data):
+    def forward_(self,data):
         """ only used in training
         """
                 
